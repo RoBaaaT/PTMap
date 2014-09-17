@@ -1,0 +1,43 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    packagingOptions {
+        exclude 'osmosis-plugins.conf'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'org/postgresql/driverconfig.properties'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.google.android.gms:play-services:5.0.89'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/postgresql.jar')
+    compile files('libs/protobuf-java-2.5.0.jar')
+    compile files('libs/acme.jar')
+    compile files('libs/jdom.jar')
+    compile files('libs/jts-1.8.jar')
+    compile files('libs/jtsio-1.8.jar')
+    compile files('libs/junit.jar')
+    compile files('libs/jts-1.13.jar')
+    compile files('libs/JTS_Test.jar')
+    compile files('libs/jtsio-1.13.jar')
+    compile files('libs/xerces.jar')
+    compile files('libs/guava-17.0.jar')
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\acme-d3532f34f3c3704629117f7b2757df8e5652d2b4.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\acme.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="58aa09ae7f439415eb480fce2fe521655a85954d"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-e311e493b238b75da4095bd5ee7b69d76d73dc42.jar"
+        jar="C:\Program Files (x86)\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\jtsio-1.13-732ea3ec64b8f929f2c62732f88c03f65adb2333.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\jtsio-1.13.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="af71e627e5c50277ac5b752247bde1e5fcf3057e"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\jts-1.13-dee8361ff0982f145dfdd92a10006adaacdddc4a.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\jts-1.13.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="1d7457bff1a63d8f2b2e0e0961300aa1831d0fb7"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\jdom-d726c9ebd259fc16e26319b040737c5a2cef56a4.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\jdom.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="6d3413677a07b47ad01f68af1ecb445a36e69ac4"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\guava-17.0-d5d7a1b5001991158e142963f6d69b69487d95a1.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\guava-17.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="9c6ef172e8de35fd8d4d8783e4821e57cdef7445"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\classes-60fe9187c52b2084583663b636181666acb94666.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\build\intermediates\exploded-aar\com.google.android.gms\play-services\5.0.89\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\classes-34d396703aa279c66e34903e47202b1c55646f62.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\JTS_Test-a495f1bd1771d747c902964058593faba042ce62.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\JTS_Test.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="30d670a023c7923299a668600b8fb36282cd433f"/>
+    <item
+        dex="C:\Users\Robert\AndroidStudioProjects\PTMap\app\build\intermediates\pre-dexed\debug\junit-012b6c115ed6f5c2e053128b8d25784d188f7e73.jar"
+        jar="C:\Users\Robert\AndroidStudioProjects\PTMap\app\libs\junit.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e64f01b90744bda704f21ac10c5f16deba64e4b4"/>
+
+</pre-dex-items>
