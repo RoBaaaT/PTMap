@@ -78,8 +78,8 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
         //Breitengrade nach Mercator-Projektion
         //yNorth = SphericalMercator.latToY(MinLatitude);
         //ySouth = SphericalMercator.latToY(MaxLatitude);
-        yNorth = xEast; //+
         ySouth = xWest; //-
+        yNorth = xEast; //+
 
         topTileSizeX = xEast - xWest;
         topTileSizeY = ySouth - yNorth;
