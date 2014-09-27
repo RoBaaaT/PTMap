@@ -5,6 +5,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.graphics.*;
+
+import java.util.LinkedList;
 import java.util.concurrent.*;
 import android.content.Context;
 
@@ -38,8 +40,6 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
 
     private ExecutorService loadExecutor = Executors.newCachedThreadPool();
 
-    private AssetManager assets;
-
     //Matrizen
     private float[] projectionMatrix = new float[16];
     private float[] viewMatrix = new float[16];
@@ -65,8 +65,8 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
     private Shader vertexShader;
     private Shader fragmentShader;
     private ShaderProgram shaderProgram;
-    private Context context;
     private GLSurfaceView surfaceView;
+    private LinkedList<VectorTileRendered> tilesRendered = new LinkedList<VectorTileRendered>();
 
     public VectorTileRenderer(ITileProvider tileProvider, Context context, GLSurfaceView surfaceView)
     {
@@ -84,9 +84,7 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
         topTileSizeY = ySouth - yNorth;
 
         this.tileProvider = tileProvider;
-        this.context = context;
         this.surfaceView = surfaceView;
-        this.assets = context.getAssets();
     }
 
     public GLSurfaceView getSurfaceView()
@@ -287,6 +285,7 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
     @Override
     public void onDrawFrame(GL10 gl)
     {
+        tilesRendered.clear();
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         GLES20.glUseProgram(shaderProgram.getId());
@@ -304,5 +303,15 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
 
         float[] identity = new float[16];
         Matrix.setIdentityM(identity, 0);
+    }
+
+    public void tileRenderedCallback(VectorTileRendered tile)
+    {
+        tilesRendered.add(tile);
+    }
+
+    public boolean hasTileRendered(VectorTileRendered tile)
+    {
+        return tilesRendered.contains(tile);
     }
 }

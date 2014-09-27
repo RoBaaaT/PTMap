@@ -660,29 +660,51 @@ public class VectorTileRendered
             }
             else if (isLoaded)
             {
-                //Vertices
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
-                int positionHandle = GLES20.glGetAttribLocation(shaderProgram.getId(), "vPosition");
-                GLES20.glEnableVertexAttribArray(positionHandle);
-                GLES20.glVertexAttribPointer(positionHandle, 3,
-                        GLES20.GL_FLOAT, false,
-                        0, 0);
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-                //Color
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[1]);
-                int colorHandle = GLES20.glGetAttribLocation(shaderProgram.getId(), "vColor");
-                GLES20.glEnableVertexAttribArray(colorHandle);
-                GLES20.glVertexAttribPointer(colorHandle, 4,
-                        GLES20.GL_UNSIGNED_BYTE, true,
-                        0, 0);
-                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-                //Render
-                GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, triangleCoordsSize / 3);
-                GLES20.glDisableVertexAttribArray(positionHandle);
-                GLES20.glDisableVertexAttribArray(colorHandle);
+                rawRender(shaderProgram);
+            }
+            else
+            {
+                renderParent(shaderProgram);
             }
         }
+    }
+
+    public void renderParent(ShaderProgram shaderProgram)
+    {
+        if (isLoaded)
+            rawRender(shaderProgram);
+        else if (parent != null)
+            parent.renderParent(shaderProgram);
+    }
+
+    private void rawRender(ShaderProgram shaderProgram)
+    {
+        if (renderer.hasTileRendered(this))
+            return;
+
+        renderer.tileRenderedCallback(this);
+
+        //Vertices
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
+        int positionHandle = GLES20.glGetAttribLocation(shaderProgram.getId(), "vPosition");
+        GLES20.glEnableVertexAttribArray(positionHandle);
+        GLES20.glVertexAttribPointer(positionHandle, 3,
+                GLES20.GL_FLOAT, false,
+                0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        //Color
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[1]);
+        int colorHandle = GLES20.glGetAttribLocation(shaderProgram.getId(), "vColor");
+        GLES20.glEnableVertexAttribArray(colorHandle);
+        GLES20.glVertexAttribPointer(colorHandle, 4,
+                GLES20.GL_UNSIGNED_BYTE, true,
+                0, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+        //Render
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, triangleCoordsSize / 3);
+        GLES20.glDisableVertexAttribArray(positionHandle);
+        GLES20.glDisableVertexAttribArray(colorHandle);
     }
 
     public double getXWest()
@@ -728,6 +750,15 @@ public class VectorTileRendered
     }
 
     public void setIsLoading() { isLoading = true; }
+
+    public boolean anyChildLoaded()
+    {
+        if (isLoaded)
+            return true;
+        else
+            return northEastChild.anyChildLoaded() || northEastChild.anyChildLoaded() ||
+                   southWestChild.anyChildLoaded() || southEastChild.anyChildLoaded();
+    }
 
     public VectorTileRendered getNorthWestChild()
     {
