@@ -1,6 +1,5 @@
 package com.robertlasch.ptmap.app;
 
-import android.app.Activity;
 import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -37,7 +36,7 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
 
     private ITileProvider tileProvider;
 
-    private ExecutorService splitExecutor = Executors.newCachedThreadPool();
+    private ExecutorService loadExecutor = Executors.newCachedThreadPool();
 
     private AssetManager assets;
 
@@ -175,6 +174,11 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
         cameraY = y;
     }
 
+    public ITileProvider getTileProvider()
+    {
+        return tileProvider;
+    }
+
     public RectF getBounds()
     {
         return new RectF((float)getLeftBounds(), (float)getBottomBounds(), (float)getRightBounds(), (float)getTopBounds());
@@ -198,11 +202,14 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
     {
         if (tile.getZoomLevel() < getZoomLevel() && RectF.intersects(tile.getBounds(), getBounds()))
         {
-            if (!tile.isSplit() && !tile.isSplitting())
+            if (!tile.isSplit())
             {
-                tile.setIsSplitting();
-                SplitCommand split = new SplitCommand(tile, this, tileProvider);
-                splitExecutor.execute(split);
+                tile.split(
+                        new VectorTileRendered(this, tile, true, true),  //Nord-West
+                        new VectorTileRendered(this, tile, true, false), //Nord-Ost
+                        new VectorTileRendered(this, tile, false, true), //Süd-West
+                        new VectorTileRendered(this, tile, false, false) //Süd-Ost
+                );
             }
 
             if (tile.isSplit())
@@ -212,6 +219,12 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
                 splitTile(tile.getSouthEastChild());
                 splitTile(tile.getSouthWestChild());
             }
+        }
+        else if (!tile.isLoading() && !tile.isLoaded() && tile.getZoomLevel() == getZoomLevel() && RectF.intersects(tile.getBounds(), getBounds()))
+        {
+            //Load tile
+            LoadCommand load = new LoadCommand(tile);
+            loadExecutor.execute(load);
         }
     }
 
@@ -240,12 +253,12 @@ public class VectorTileRenderer implements GLSurfaceView.Renderer
         shaderProgram.link();
 
         rootTiles = new VectorTileRendered[]{
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.WaterAreas), VectorTileRendered.TileType.WaterAreas, this, null, false, false),
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.LandUsages), VectorTileRendered.TileType.LandUsages, this, null, false, false),
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.RoadLines), VectorTileRendered.TileType.RoadLines, this, null, false, false),
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.Buildings), VectorTileRendered.TileType.Buildings, this, null, false, false),
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.RoadLabels), VectorTileRendered.TileType.RoadLabels, this, null, false, false),
-                new VectorTileRendered(tileProvider.getTile(0, 0, 0, VectorTileRendered.TileType.PointsOfInterest), VectorTileRendered.TileType.PointsOfInterest, this, null, false, false)
+                new VectorTileRendered(VectorTileRendered.TileType.WaterAreas, this, null, false, false),
+                new VectorTileRendered(VectorTileRendered.TileType.LandUsages, this, null, false, false),
+                new VectorTileRendered(VectorTileRendered.TileType.RoadLines, this, null, false, false),
+                new VectorTileRendered(VectorTileRendered.TileType.Buildings, this, null, false, false),
+                new VectorTileRendered(VectorTileRendered.TileType.RoadLabels, this, null, false, false),
+                new VectorTileRendered(VectorTileRendered.TileType.PointsOfInterest, this, null, false, false)
         };
     }
 

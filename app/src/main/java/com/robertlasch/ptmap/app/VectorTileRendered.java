@@ -50,7 +50,8 @@ public class VectorTileRendered
     private VectorTileRendered southWestChild;
     private VectorTileRendered southEastChild;
     private boolean isSplit = false;
-    private boolean isSplitting = false;
+    private boolean isLoaded = false;
+    private boolean isLoading = false;
 
     private double xWest, xEast, yNorth, ySouth;
 
@@ -62,17 +63,14 @@ public class VectorTileRendered
     private int triangleCoordsSize = 0;
     private int colorValuesSize = 0;
 
-
-    public VectorTileRendered(HashMap<Geometry, HashMap<String, String>> data,
-                              VectorTileRenderer renderer,
+    public VectorTileRendered(VectorTileRenderer renderer,
                               VectorTileRendered parent,
                               boolean northChild, boolean westChild)
     {
-        this(data, parent.getType(), renderer, parent, northChild, westChild);
+        this(parent.getType(), renderer, parent, northChild, westChild);
     }
 
-    public VectorTileRendered(HashMap<Geometry, HashMap<String, String>> data,
-                              TileType type,
+    public VectorTileRendered(TileType type,
                               VectorTileRenderer renderer,
                               VectorTileRendered parent,
                               boolean northChild, boolean westChild)
@@ -137,6 +135,20 @@ public class VectorTileRendered
             this.xEast = this.xWest + renderer.getTileSizeX(this.zoomLevel);
             this.ySouth = this.yNorth + renderer.getTileSizeY(this.zoomLevel);
         }
+
+        //If zoom to small => split
+        if (renderer.getZoomLevel() > this.getZoomLevel())
+            renderer.splitTile(this);
+    }
+
+    public void load()
+    {
+        if (isLoading)
+            return;
+
+        isLoading = true;
+
+        HashMap<Geometry, HashMap<String, String>> data = renderer.getTileProvider().getTile(x, y, zoomLevel - 1, type);
 
         if (data != null)
         {
@@ -406,9 +418,8 @@ public class VectorTileRendered
 
         buildBuffers();
 
-        //If zoom to small => split
-        if (renderer.getZoomLevel() > this.getZoomLevel())
-            renderer.splitTile(this);
+        isLoading = false;
+        isLoaded = true;
     }
 
     private final static HashMap<String, int[]> highwayColors = new HashMap<String, int[]>();
@@ -647,7 +658,7 @@ public class VectorTileRendered
                 southWestChild.render(shaderProgram, renderBounds);
                 southEastChild.render(shaderProgram, renderBounds);
             }
-            else
+            else if (isLoaded)
             {
                 //Vertices
                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, buffers[0]);
@@ -709,12 +720,14 @@ public class VectorTileRendered
         return isSplit;
     }
 
-    public boolean isSplitting()
+    public boolean isLoaded() { return isLoaded; }
+
+    public boolean isLoading()
     {
-        return isSplitting;
+        return isLoading;
     }
 
-    public void setIsSplitting() { isSplitting = true; }
+    public void setIsLoading() { isLoading = true; }
 
     public VectorTileRendered getNorthWestChild()
     {
